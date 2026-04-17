@@ -1,0 +1,535 @@
+
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employee Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --font: 'DM Sans', sans-serif;
+        --mono: 'DM Mono', monospace;
+        --bg: #f7f7f5;
+        --surface: #ffffff;
+        --surface-2: #f1efe8;
+        --border: rgba(0,0,0,0.1);
+        --border-md: rgba(0,0,0,0.15);
+        --text-primary: #1a1a18;
+        --text-secondary: #5f5e5a;
+        --text-tertiary: #888780;
+        --radius-md: 8px;
+        --radius-lg: 12px;
+        --teal-50: #e1f5ee;
+        --teal-800: #085041;
+        --coral-50: #faece7;
+        --coral-600: #993c1d;
+        --blue-50: #e6f1fb;
+        --blue-800: #0c447c;
+        --blue-600: #185fa5;
+        --green-50: #eaf3de;
+        --green-600: #3b6d11;
+        --red-50: #fcebeb;
+        --red-600: #a32d2d;
+        --amber-50: #faeeda;
+        --amber-600: #854f0b;
+        --gray-100: #d3d1c7;
+      }
+
+      body {
+        font-family: var(--font);
+        background: var(--bg);
+        min-height: 100vh;
+        color: var(--text-primary);
+        padding: 2rem 1rem;
+      }
+
+      .wrapper {
+        max-width: 760px;
+        margin: 0 auto;
+      }
+
+      /* ── Header ── */
+      .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--surface);
+        border: 0.5px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .header-left { display: flex; align-items: center; gap: 14px; }
+
+      .avatar {
+        width: 48px; height: 48px;
+        border-radius: 50%;
+        background: var(--blue-50);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 15px; font-weight: 500;
+        color: var(--blue-800);
+        border: 0.5px solid var(--border);
+        flex-shrink: 0;
+      }
+
+      .header-info h1 {
+        font-size: 17px; font-weight: 500;
+        color: var(--text-primary);
+        line-height: 1.2;
+      }
+      .header-info p {
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin-top: 3px;
+      }
+
+      .date-chip {
+        font-size: 12px;
+        font-family: var(--mono);
+        color: var(--text-secondary);
+        background: var(--surface-2);
+        border: 0.5px solid var(--border);
+        border-radius: 20px;
+        padding: 5px 14px;
+        white-space: nowrap;
+      }
+
+      /* ── Metric Cards ── */
+      .metric-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 1rem;
+      }
+
+      .metric-card {
+        background: var(--surface);
+        border: 0.5px solid var(--border);
+        border-radius: var(--radius-md);
+        padding: 16px 18px;
+      }
+      .metric-card .label {
+        font-size: 11px;
+        color: var(--text-tertiary);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
+      .metric-card .value {
+        font-size: 24px; font-weight: 500;
+        color: var(--text-primary);
+        line-height: 1;
+      }
+      .metric-card .value span { font-size: 15px; font-weight: 400; }
+      .metric-card .sub {
+        font-size: 11px;
+        color: var(--text-secondary);
+        margin-top: 4px;
+      }
+
+      /* ── Action Buttons ── */
+      .action-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 1rem;
+      }
+
+      .btn-action {
+        display: flex; align-items: center; justify-content: center; gap: 8px;
+        padding: 15px;
+        border-radius: var(--radius-md);
+        border: 0.5px solid var(--border);
+        cursor: pointer;
+        font-family: var(--font);
+        font-size: 14px; font-weight: 500;
+        transition: opacity 0.15s, transform 0.12s;
+      }
+      .btn-action:hover { opacity: 0.82; }
+      .btn-action:active { transform: scale(0.98); }
+
+      .btn-checkin   { background: var(--teal-50);  color: var(--teal-800); }
+      .btn-checkout  { background: var(--coral-50); color: var(--coral-600); }
+      .btn-view      { background: var(--surface-2); color: var(--text-primary); }
+
+      .btn-icon {
+        width: 20px; height: 20px;
+        border-radius: 50%;
+        border: 1.5px solid currentColor;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 13px;
+        flex-shrink: 0;
+        line-height: 1;
+      }
+
+      /* ── Section header ── */
+      .section-header {
+        display: flex; align-items: center; justify-content: space-between;
+        margin-bottom: 10px;
+      }
+      .section-title {
+        font-size: 12px; font-weight: 500;
+        color: var(--text-tertiary);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      /* ── Table ── */
+      .table-wrapper {
+        background: var(--surface);
+        border: 0.5px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+      }
+
+      .attendance-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+        table-layout: fixed;
+      }
+      .attendance-table thead th {
+        text-align: left;
+        padding: 10px 14px;
+        font-size: 11px; font-weight: 500;
+        color: var(--text-tertiary);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        border-bottom: 0.5px solid var(--border);
+        background: var(--surface-2);
+      }
+      .attendance-table colgroup .col-date    { width: 22%; }
+      .attendance-table colgroup .col-checkin { width: 18%; }
+      .attendance-table colgroup .col-checkout{ width: 18%; }
+      .attendance-table colgroup .col-hours   { width: 16%; }
+      .attendance-table colgroup .col-status  { width: 26%; }
+
+      .attendance-table tbody tr {
+        border-bottom: 0.5px solid var(--border);
+        transition: background 0.1s;
+      }
+      .attendance-table tbody tr:last-child { border-bottom: none; }
+      .attendance-table tbody tr:hover { background: var(--surface-2); }
+
+      .attendance-table tbody td {
+        padding: 11px 14px;
+        color: var(--text-primary);
+      }
+      .mono {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+
+      .badge {
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 11px; font-weight: 500;
+        letter-spacing: 0.02em;
+      }
+      .badge-present { background: var(--green-50); color: var(--green-600); }
+      .badge-absent  { background: var(--red-50);   color: var(--red-600);   }
+      .badge-late    { background: var(--amber-50);  color: var(--amber-600); }
+      .badge-half    { background: var(--blue-50);   color: var(--blue-800);  }
+
+      .dot {
+        width: 6px; height: 6px;
+        border-radius: 50%;
+        display: inline-block;
+        flex-shrink: 0;
+      }
+      .dot-present { background: var(--green-600); }
+      .dot-absent  { background: var(--red-600);   }
+      .dot-late    { background: var(--amber-600);  }
+      .dot-half    { background: var(--blue-600);   }
+
+      /* ── Empty state ── */
+      .empty-state {
+        text-align: center;
+        padding: 2.5rem 1rem;
+        color: var(--text-tertiary);
+        font-size: 13px;
+      }
+
+      /* ── Toast ── */
+      .toast {
+        position: fixed;
+        bottom: 1.5rem; left: 50%;
+        transform: translateX(-50%) translateY(8px);
+        background: var(--text-primary);
+        color: #fff;
+        border-radius: var(--radius-md);
+        padding: 10px 20px;
+        font-size: 13px; font-weight: 500;
+        opacity: 0;
+        pointer-events: none;
+        white-space: nowrap;
+        transition: opacity 0.2s, transform 0.2s;
+        z-index: 100;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+
+      @media (max-width: 520px) {
+        .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .action-row  { grid-template-columns: 1fr 1fr; }
+        .btn-view    { grid-column: span 2; }
+        .header      { flex-wrap: wrap; gap: 10px; }
+        .date-chip   { width: 100%; text-align: center; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="wrapper">
+
+      <!-- Header -->
+      <div class="header">
+        <div class="header-left">
+          <div class="avatar" id="avatarEl">--</div>
+          <div class="header-info">
+            <h1 id="nameEl">Loading...</h1>
+            <p>Employee Dashboard</p>
+          </div>
+        </div>
+        <div class="date-chip" id="datechip"></div>
+      </div>
+
+      <!-- Metric Cards -->
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div class="label">This month</div>
+          <div class="value" id="metricPresent">—</div>
+          <div class="sub">days present</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Avg hours</div>
+          <div class="value" id="metricHours">—</div>
+          <div class="sub">per day</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Attendance</div>
+          <div class="value" id="metricRate">—</div>
+          <div class="sub">on-time rate</div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-row">
+        <button class="btn-action btn-checkin" onclick="checkIn()">
+          <span class="btn-icon">+</span> Check in
+        </button>
+        <button class="btn-action btn-checkout" onclick="checkout()">
+          <span class="btn-icon">–</span> Check out
+        </button>
+        <button class="btn-view btn-action" onclick="viewAttendance()">
+          <span class="btn-icon">↓</span> View log
+        </button>
+      </div>
+
+      <!-- Attendance Table -->
+      <div class="section-header">
+        <span class="section-title">Attendance log</span>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="attendance-table" id="attendanceTable">
+          <colgroup>
+            <col class="col-date"/>
+            <col class="col-checkin"/>
+            <col class="col-checkout"/>
+            <col class="col-hours"/>
+            <col class="col-status"/>
+          </colgroup>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Check-in</th>
+              <th>Check-out</th>
+              <th>Hours</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="attendanceBody">
+            <tr>
+              <td colspan="5">
+                <div class="empty-state">Click "View log" to load your attendance records.</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+      // ── Helpers ──────────────────────────────────────────────
+      function showToast(msg, duration = 2800) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), duration);
+      }
+
+      function getInitials(name) {
+        return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+      }
+
+      // ── Display Name ─────────────────────────────────────────
+      function Display_name() {
+        const name = "{{name}}";
+        document.getElementById('nameEl').textContent = name;
+        document.getElementById('avatarEl').textContent = getInitials(name);
+      }
+      Display_name();
+
+      // ── Date chip ────────────────────────────────────────────
+      document.getElementById('datechip').textContent = new Date().toLocaleDateString('en-IN', {
+        weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
+      });
+
+      // ── Check-in ─────────────────────────────────────────────
+      function checkIn() {
+        if (!navigator.geolocation) { alert('Geolocation not supported'); return; }
+        navigator.geolocation.getCurrentPosition(
+          async function (position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            try {
+              const geoRes  = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+              const geoData = await geoRes.json();
+              const location_name = geoData.display_name;
+
+              const data = {
+                user_id: "{{ user_id }}",
+                name: "{{name}}",
+                lat: lat,
+                lng: lng,
+                location_name: location_name,
+              };
+
+              const res = await fetch('/checkin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+              });
+              const result = await res.json();
+              showToast(result.message || 'Checked in successfully');
+            } catch (err) {
+              showToast('Check-in failed. Please try again.');
+            }
+          },
+          function () { alert('Location access denied'); }
+        );
+      }
+
+      // ── Check-out ────────────────────────────────────────────
+      function checkout() {
+        if (!navigator.geolocation) { alert('Geolocation not supported'); return; }
+        navigator.geolocation.getCurrentPosition(
+          async function (position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            try {
+              const geoRes  = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+              const geoData = await geoRes.json();
+              const location_name = geoData.display_name;
+
+              const data = {
+                user_id: "{{ user_id }}",
+                lat: lat,
+                lng: lng,
+                location_name: location_name,
+              };
+
+              const res = await fetch('/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+              });
+              const result = await res.json();
+              showToast(result.message || 'Checked out successfully');
+            } catch (err) {
+              showToast('Check-out failed. Please try again.');
+            }
+          },
+          function () { alert('Location access denied'); }
+        );
+      }
+
+      // ── View Attendance ───────────────────────────────────────
+      function viewAttendance() {
+        const tbody = document.getElementById('attendanceBody');
+        tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state">Loading records…</div></td></tr>`;
+
+        fetch('/view_attendance', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: "{{ user_id }}", name: "{{name}}" }),
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (!data || data.length === 0) {
+              tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state">No attendance records found.</div></td></tr>`;
+              return;
+            }
+
+            // Compute summary metrics
+            const presentDays = data.filter(r => r.status && r.status.toLowerCase() === 'present').length;
+            const onTime      = data.filter(r => r.status && ['present','half day'].includes(r.status.toLowerCase())).length;
+            const rate        = data.length > 0 ? Math.round((onTime / data.length) * 100) : 0;
+
+            // Parse working hours (expects "Xh Ym" or decimal string)
+            let totalHours = 0, countHours = 0;
+            data.forEach(r => {
+              if (r.Working_hours && r.Working_hours !== '—') {
+                const hMatch = String(r.Working_hours).match(/(\d+(\.\d+)?)/);
+                if (hMatch) { totalHours += parseFloat(hMatch[1]); countHours++; }
+              }
+            });
+            const avgHours = countHours > 0 ? (totalHours / countHours).toFixed(1) : '—';
+
+            document.getElementById('metricPresent').textContent = presentDays;
+            document.getElementById('metricHours').textContent   = avgHours;
+            document.getElementById('metricRate').innerHTML      = rate + '<span>%</span>';
+
+            // Badge map
+            const badgeMap = {
+              present:  `<span class="badge badge-present"><span class="dot dot-present"></span>Present</span>`,
+              absent:   `<span class="badge badge-absent"><span class="dot dot-absent"></span>Absent</span>`,
+              late:     `<span class="badge badge-late"><span class="dot dot-late"></span>Late</span>`,
+              'half day': `<span class="badge badge-half"><span class="dot dot-half"></span>Half day</span>`,
+            };
+
+            tbody.innerHTML = data.map(r => {
+              const statusKey = (r.status || '').toLowerCase();
+              const badge = badgeMap[statusKey] || `<span class="badge badge-absent">${r.status || '—'}</span>`;
+              return `<tr>
+                <td>${r.date || '—'}</td>
+                <td class="mono">${r.check_in || '—'}</td>
+                <td class="mono">${r.check_out || '—'}</td>
+                <td class="mono">${r.Working_hours || '—'}</td>
+                <td>${badge}</td>
+              </tr>`;
+            }).join('');
+          })
+          .catch(() => {
+            tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state">Failed to load records.</div></td></tr>`;
+          });
+      }
+    </script>
+  </body>
+</html>
