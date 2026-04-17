@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=0, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .sam{
+            display: flex;
+            flex-wrap: wrap;
+            grid-column: auto auto auto;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome, Admin!</h1>
+    <h2>{{name}}</h2>
+    <div class="sam" id="report"></div>
+
+
+    <button onclick="getemployee()">Get all User</button>
+
+
+
+    
+
+    <script>
+        
+        function getemployee()
+        {
+
+
+            // --------get the details of all employee----------------
+            fetch("/employee_details",{
+                method:"GET",
+                headers:{
+                    "Content-Type":"application/json"
+                }
+            }).then(res=>res.json())
+            .then(data=>{
+                let data1=data;
+                for (let i=0;i<data1.length;i++)
+                {
+                    const div=document.createElement("div");
+                    div.className="emp-card";
+                    div.style.border="1px solid black";
+                    div.style.padding="10px";
+                    div.style.backgroundColor="#f3f3f3";
+                    div.style.borderRadius="5px";
+                    div.style.cursor="pointer";
+                    div.innerHTML=`<p>Name: ${data1[i].name}</p><p>Email: ${data1[i].email}</p><p>Role: ${data1[i].role}</p>`;
+                    document.querySelector(".sam").appendChild(div);
+                    
+
+                    div.onclick=function ()
+                    {
+                        getemployeeattendance(data1[i]._id);        
+                    }  
+                }
+            });
+    }
+    // <------------------------------show the employee attendence-------------------->
+
+        function getemployeeattendance(id) {
+    fetch("/employee_attendance_get", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ user_id: id })   // ✅ correct
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log(data)
+        showReport(data);
+    });
+}
+
+    function showReport(data) {
+    const container = document.getElementById("report");
+
+    // check container exists
+    if (!container) {
+        console.error("Report container not found");
+        return;
+    }
+
+    // clear old data
+    container.innerHTML = "<h1>Employee Attendance Report</h1>";
+
+    const div1 = document.createElement("div");
+    div1.style.marginTop = "20px";
+    div1.className = "report";
+
+    const table = document.createElement("table");
+    table.border = "1";
+    table.style.width = "100%";
+    table.style.borderCollapse = "collapse";
+
+    table.innerHTML = `
+        <tr>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Check-in Time</th>
+            <th>Check-in Location</th>
+            <th>Check-out Time</th>
+            <th>Check-out Location</th>
+            <th>Working Hours</th>
+        </tr>
+    `;
+
+    data.forEach(record => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${record.date ? new Date(record.date).toLocaleDateString() : "-"}</td>
+            <td>${record.status || "-"}</td>
+            <td>${record.check_in || "N/A"}</td>
+            <td>${record.check_in_location?.location_name || "N/A"}</td>
+            <td>${record.check_out || "N/A"}</td>
+            <td>${record.check_out_location?.location_name || "N/A"}</td>
+            <td>${record.Working_hours || "N/A"}</td>
+        `;
+
+        table.appendChild(row);
+    });
+
+    div1.appendChild(table);
+    container.appendChild(div1);
+}
+
+    </script>
+</body>
+</html>

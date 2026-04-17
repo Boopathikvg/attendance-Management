@@ -14,7 +14,7 @@ def login():
 
         if user and user["password"] == password:
             if user["role"]=="admin":
-                return "Admin Dashboard"
+                return redirect(url_for("admin.admin_das",user_id=str(user["_id"]),name=str(user["name"])))
             elif user["role"]=="employee":
                 return redirect(url_for("attendance.employee_dashboard", user_id=str(user["_id"]), name=str(user["name"])))
         else:
