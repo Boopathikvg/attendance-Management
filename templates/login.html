@@ -3,147 +3,696 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Animated Login</title>
+<title>AlaguMuguran — Employee Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Arial, sans-serif;
-    }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(135deg, #667eea, #764ba2);
-    }
+  :root {
+    --black:     #0a0a0a;
+    --black-2:   #111111;
+    --black-3:   #1a1a1a;
+    --black-4:   #242424;
+    --black-5:   #303030;
+    --warm-white:#f5f0e8;
+    --warm-100:  #ede8df;
+    --warm-200:  #d9d3c8;
+    --warm-300:  #b8b0a0;
+    --warm-400:  #8a8278;
+    --gold:      #c8a96e;
+    --gold-light:#e2c99a;
+    --gold-dim:  rgba(200,169,110,0.15);
+    --red:       #e05252;
+    --green:     #5aad82;
+    --font-serif: 'DM Serif Display', Georgia, serif;
+    --font-sans:  'DM Sans', sans-serif;
+    --font-mono:  'DM Mono', monospace;
+  }
 
-    .container {
-        width: 900px;
-        height: 500px;
-        display: flex;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-        animation: fadeIn 1s ease-in-out;
-    }
+  html, body {
+    height: 100%;
+    font-family: var(--font-sans);
+    background: var(--black);
+    color: var(--warm-white);
+    overflow-x: hidden;
+  }
 
-    /* LEFT SIDE (IMAGE) */
-    .left {
-        width: 50%;
-        background: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f') no-repeat center/cover;
-        position: relative;
-    }
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
 
-    .left::after {
-        content: "";
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.4);
-    }
+  /* ── LAYOUT ── */
+  .page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    z-index: 1;
+  }
 
-    /* RIGHT SIDE (FORM) */
+  /* ── LEFT PANEL ── */
+  .left {
+    background: var(--black-2);
+    border-right: 1px solid var(--black-5);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Decorative geometric shapes */
+  .left::before {
+    content: '';
+    position: absolute;
+    width: 480px;
+    height: 480px;
+    border-radius: 50%;
+    border: 1px solid rgba(200,169,110,0.08);
+    top: -120px;
+    right: -180px;
+    pointer-events: none;
+  }
+  .left::after {
+    content: '';
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    border: 1px solid rgba(200,169,110,0.05);
+    bottom: -80px;
+    left: -100px;
+    pointer-events: none;
+  }
+
+  .left-inner { position: relative; z-index: 1; }
+
+  /* Brand */
+  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 4rem; }
+  .brand-mark {
+    width: 40px; height: 40px;
+    border: 1.5px solid var(--gold);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .brand-mark svg { width: 18px; height: 18px; color: var(--gold); }
+  .brand-name {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--warm-white);
+    letter-spacing: 0.02em;
+  }
+  .brand-tag {
+    font-size: 10px;
+    color: var(--warm-400);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 1px;
+  }
+
+  /* Headline */
+  .left-headline {
+    font-family: var(--font-serif);
+    font-size: clamp(2.4rem, 4vw, 3.2rem);
+    line-height: 1.15;
+    color: var(--warm-white);
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+  }
+  .left-headline em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .left-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--warm-300);
+    max-width: 340px;
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: flex;
+    gap: 0;
+    margin-top: 3.5rem;
+    border: 1px solid var(--black-5);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .stat {
+    flex: 1;
+    padding: 1.1rem 1.25rem;
+    border-right: 1px solid var(--black-5);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat-lbl {
+    font-size: 10px;
+    color: var(--warm-400);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-weight: 500;
+  }
+
+  /* Bottom badge */
+  .left-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 3rem;
+  }
+  .status-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+  .left-footer-txt {
+    font-size: 11px;
+    color: var(--warm-400);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── RIGHT PANEL (FORM) ── */
+  .right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 2rem;
+    background: var(--black);
+  }
+
+  .form-wrap {
+    width: 100%;
+    max-width: 380px;
+    animation: slideUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .form-header { margin-bottom: 2.5rem; }
+  .form-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .form-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 1px;
+    background: var(--gold);
+  }
+  .form-title {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    color: var(--warm-white);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .form-sub {
+    font-size: 13px;
+    color: var(--warm-400);
+    line-height: 1.6;
+  }
+
+  /* Fields */
+  .field { margin-bottom: 1.1rem; }
+  .field-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--warm-300);
+    margin-bottom: 8px;
+  }
+  .field-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .field-icon {
+    position: absolute;
+    left: 14px;
+    color: var(--warm-400);
+    pointer-events: none;
+    display: flex;
+  }
+  .field-icon svg { width: 15px; height: 15px; }
+
+  .field input {
+    width: 100%;
+    padding: 13px 14px 13px 42px;
+    background: var(--black-2);
+    border: 1px solid var(--black-5);
+    border-radius: 10px;
+    color: var(--warm-white);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+  .field input::placeholder { color: var(--black-5); }
+  .field input:focus {
+    border-color: var(--gold);
+    background: var(--black-3);
+    box-shadow: 0 0 0 3px rgba(200,169,110,0.08);
+  }
+
+  /* Password toggle */
+  .pass-toggle {
+    position: absolute;
+    right: 14px;
+    background: none;
+    border: none;
+    color: var(--warm-400);
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    transition: color 0.15s;
+    margin-top: 0;
+  }
+  .pass-toggle:hover { color: var(--warm-white); transform: none; box-shadow: none; background: none; }
+  .pass-toggle svg { width: 15px; height: 15px; }
+
+  /* Extras */
+  .field-extras {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.6rem;
+    margin-top: -0.2rem;
+  }
+  .remember {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--warm-400);
+  }
+  .remember input[type="checkbox"] {
+    width: 15px; height: 15px;
+    accent-color: var(--gold);
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+  }
+  .forgot {
+    font-size: 12px;
+    color: var(--warm-400);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .forgot:hover { color: var(--gold); }
+
+  /* Submit */
+  .btn-login {
+    width: 100%;
+    padding: 14px;
+    background: var(--gold);
+    color: #0a0a0a;
+    border: none;
+    border-radius: 10px;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 0;
+  }
+  .btn-login svg { width: 16px; height: 16px; }
+  .btn-login:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(200,169,110,0.22);
+  }
+  .btn-login:active { transform: scale(0.98); }
+
+  /* Divider */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 1.5rem 0;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--black-5); }
+  .divider-txt { font-size: 11px; color: var(--warm-400); white-space: nowrap; }
+
+  /* ID login option */
+  .btn-id {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    color: var(--warm-300);
+    border: 1px solid var(--black-5);
+    border-radius: 10px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 0;
+  }
+  .btn-id svg { width: 15px; height: 15px; }
+  .btn-id:hover {
+    border-color: var(--warm-400);
+    color: var(--warm-white);
+    background: var(--black-3);
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Footer note */
+  .form-footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 11px;
+    color: var(--warm-400);
+    line-height: 1.6;
+  }
+  .form-footer a { color: var(--gold); text-decoration: none; }
+  .form-footer a:hover { text-decoration: underline; }
+
+  /* Error message */
+  .field-error {
+    font-size: 11px;
+    color: var(--red);
+    margin-top: 5px;
+    display: none;
+    align-items: center;
+    gap: 4px;
+  }
+  .field-error.show { display: flex; }
+
+  /* ── MOBILE BRAND (top bar on mobile) ── */
+  .mobile-brand {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2rem;
+  }
+  .mobile-brand .brand-mark { width: 34px; height: 34px; }
+  .mobile-brand .brand-name { font-size: 14px; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .page { grid-template-columns: 1fr; }
+    .left { display: none; }
     .right {
-        width: 50%;
-        background: rgba(255,255,255,0.1);
-        backdrop-filter: blur(15px);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        animation: slideIn 1s ease;
+      padding: 2.5rem 1.5rem;
+      min-height: 100vh;
+      justify-content: flex-start;
+      padding-top: 3.5rem;
     }
+    .mobile-brand { display: flex; }
+    .form-wrap { max-width: 100%; }
+  }
 
-    .right h2 {
-        color: #fff;
-        margin-bottom: 20px;
-    }
+  @media (max-width: 400px) {
+    .right { padding: 2rem 1.25rem; }
+    .form-title { font-size: 1.7rem; }
+  }
 
-    .input-box {
-        width: 250px;
-        margin: 10px 0;
-    }
+  /* Loading state */
+  .btn-login.loading {
+    pointer-events: none;
+    opacity: 0.8;
+  }
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(0,0,0,0.2);
+    border-top-color: #000;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+  .btn-login.loading .spinner { display: block; }
+  .btn-login.loading .btn-arrow { display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-    .input-box input {
-        width: 100%;
-        padding: 10px;
-        border: none;
-        outline: none;
-        border-radius: 8px;
-        background: rgba(255,255,255,0.2);
-        color: #fff;
-        transition: 0.3s;
-    }
-
-    .input-box input::placeholder {
-        color: #ddd;
-    }
-
-    .input-box input:focus {
-        background: rgba(255,255,255,0.4);
-        transform: scale(1.05);
-    }
-
-    button {
-        margin-top: 15px;
-        padding: 10px 30px;
-        border: none;
-        border-radius: 8px;
-        background: #fff;
-        color: #333;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    button:hover {
-        background: #333;
-        color: #fff;
-        transform: scale(1.05);
-    }
-
-    /* Animations */
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-
-    @keyframes slideIn {
-        from { transform: translateX(100px); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-
+  /* Input error state */
+  .field input.error { border-color: var(--red); }
+  .field input.error:focus { box-shadow: 0 0 0 3px rgba(224,82,82,0.1); }
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<div class="page">
 
-    <!-- LEFT IMAGE -->
-    <div class="left"></div>
+  <!-- ── LEFT PANEL ── -->
+  <div class="left">
+    <div class="left-inner">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <path d="M16 7V5a2 2 0 00-4 0v2M8 7V5a2 2 0 014 0"/>
+            <circle cx="12" cy="14" r="2"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">AlaguMuguran</div>
+          <div class="brand-tag">Employee Portal</div>
+        </div>
+      </div>
 
-    <!-- RIGHT LOGIN -->
-    <div class="right">
-        <h2>Login</h2>
+      <div class="left-headline">
+        Your work,<br>
+        <em>tracked</em><br>
+        beautifully.
+      </div>
 
-        <form action="/" method="post">
-            <div class="input-box">
-                <input type="email" name="email" placeholder="Email" required>
-            </div>
+      <p class="left-desc">
+        Manage attendance, track working hours, apply for leave, and stay on top of your schedule — all in one place.
+      </p>
 
-            <div class="input-box">
-                <input type="password" name="password" placeholder="Password" required>
-            </div>
-
-            <button type="submit">Login</button>
-        </form>
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-num">98%</div>
+          <div class="stat-lbl">Uptime</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">2.4k</div>
+          <div class="stat-lbl">Employees</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">14</div>
+          <div class="stat-lbl">Departments</div>
+        </div>
+      </div>
     </div>
 
+    <div class="left-footer">
+      <div class="status-dot"></div>
+      <div class="left-footer-txt">All systems operational · v2.4.1</div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT PANEL ── -->
+  <div class="right">
+    <div class="form-wrap">
+
+      <!-- Mobile brand -->
+      <div class="mobile-brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="color:var(--gold);width:16px;height:16px">
+            <rect x="2" y="7" width="20" height="14" rx="2"/>
+            <path d="M16 7V5a2 2 0 00-4 0v2M8 7V5a2 2 0 014 0"/>
+            <circle cx="12" cy="14" r="2"/>
+          </svg>
+        </div>
+        <div>
+          <div class="brand-name">AlaguMuguran</div>
+          <div class="brand-tag" style="font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--warm-400)">Employee Portal</div>
+        </div>
+      </div>
+
+      <div class="form-header">
+        <div class="form-eyebrow">Secure Access</div>
+        <div class="form-title">Welcome back</div>
+        <div class="form-sub">Sign in to access your employee dashboard and attendance records.</div>
+      </div>
+
+      <form action="/" method="post" id="loginForm" onsubmit="handleLogin(event)">
+
+        <div class="field">
+          <label class="field-label" for="email">Email Address</label>
+          <div class="field-wrap">
+            <span class="field-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+            </span>
+            <input type="email" id="email" name="email" placeholder="you@company.com" required autocomplete="email">
+          </div>
+          <div class="field-error" id="emailErr">
+            <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Please enter a valid email address.
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="password">Password</label>
+          <div class="field-wrap">
+            <span class="field-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0110 0v4"/>
+              </svg>
+            </span>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+            <button type="button" class="pass-toggle" onclick="togglePass()" id="passToggle" aria-label="Toggle password">
+              <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+          <div class="field-error" id="passErr">
+            <svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Password must be at least 6 characters.
+          </div>
+        </div>
+
+        <div class="field-extras">
+          <label class="remember">
+            <input type="checkbox" name="remember"> Remember me
+          </label>
+          <a href="/forgot-password" class="forgot">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-login" id="loginBtn">
+          <div class="spinner"></div>
+          <span class="btn-arrow">Sign In</span>
+          <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+
+        <div class="divider">
+          <div class="divider-line"></div>
+          <div class="divider-txt">or sign in with</div>
+          <div class="divider-line"></div>
+        </div>
+
+        <button type="button" class="btn-id" onclick="window.location.href='/id-login'">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <rect x="2" y="5" width="20" height="14" rx="2"/>
+            <path d="M2 10h20"/>
+          </svg>
+          Sign in with Employee ID
+        </button>
+
+      </form>
+
+      <div class="form-footer">
+        Having trouble? <a href="/support">Contact IT Support</a><br>
+        <span style="display:inline-block;margin-top:5px;font-size:10px;color:var(--black-5)">
+          © 2026 AlaguMuguran · <a href="/privacy" style="color:var(--black-5)">Privacy</a>
+        </span>
+      </div>
+
+    </div>
+  </div>
+
 </div>
+
+<script>
+  function togglePass() {
+    const input = document.getElementById('password');
+    const icon  = document.getElementById('eyeIcon');
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>`;
+    } else {
+      input.type = 'password';
+      icon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+    }
+  }
+
+  function handleLogin(e) {
+    e.preventDefault();
+    const email    = document.getElementById('email');
+    const password = document.getElementById('password');
+    const emailErr = document.getElementById('emailErr');
+    const passErr  = document.getElementById('passErr');
+    const btn      = document.getElementById('loginBtn');
+    let valid = true;
+
+    // Reset errors
+    emailErr.classList.remove('show');
+    passErr.classList.remove('show');
+    email.classList.remove('error');
+    password.classList.remove('error');
+
+    if (!email.value || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+      emailErr.classList.add('show');
+      email.classList.add('error');
+      valid = false;
+    }
+    if (!password.value || password.value.length < 6) {
+      passErr.classList.add('show');
+      password.classList.add('error');
+      valid = false;
+    }
+    if (!valid) return;
+
+    // Loading state
+    btn.classList.add('loading');
+
+    // Submit the form for real after brief delay (UX feedback)
+    setTimeout(() => {
+      e.target.submit();
+    }, 800);
+  }
+</script>
 
 </body>
 </html>

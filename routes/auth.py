@@ -18,6 +18,6 @@ def login():
             elif user["role"]=="employee":
                 return redirect(url_for("attendance.employee_dashboard", user_id=str(user["_id"]), name=str(user["name"])))
         else:
-            return "Invalid"
+            return render_template("login.html", error="Invalid email or password")
 
     return render_template("login.html")

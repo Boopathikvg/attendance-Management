@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-  <!-- SheetJS for Excel export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <style>
@@ -34,6 +33,8 @@
       --red-100:   #fde8e6;
       --amber-500: #c07c1a;
       --amber-100: #fdefd4;
+      --purple-500: #7c3aed;
+      --purple-100: #ede9fe;
       --surface:   #ffffff;
       --bg:        #f0f4f9;
       --border:    rgba(30,60,100,0.09);
@@ -50,12 +51,7 @@
       --shadow-lg: 0 12px 40px rgba(13,27,42,0.18);
     }
 
-    body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text-1);
-      min-height: 100vh;
-    }
+    body { font-family: var(--font); background: var(--bg); color: var(--text-1); min-height: 100vh; }
 
     /* ══ TOPNAV ══ */
     .topnav {
@@ -99,10 +95,7 @@
       padding: 2.5rem 2rem 4.5rem;
       position: relative; overflow: hidden;
     }
-    .hero-bg {
-      position: absolute; inset: 0; overflow: hidden; pointer-events: none;
-    }
-    /* Decorative SVG circles in hero */
+    .hero-bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
     .hero-bg svg { position: absolute; }
     .hero-inner {
       position: relative; z-index: 1;
@@ -114,22 +107,19 @@
       background: linear-gradient(135deg, var(--gold-400) 0%, var(--gold-500) 100%);
       display: flex; align-items: center; justify-content: center;
       font-size: 30px; font-weight: 700; color: var(--navy-900);
-      border: 3px solid rgba(255,255,255,0.22);
-      flex-shrink: 0;
+      border: 3px solid rgba(255,255,255,0.22); flex-shrink: 0;
       box-shadow: 0 6px 24px rgba(0,0,0,0.35);
     }
     .hero-text h2 { font-size: 26px; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
     .hero-text p  { font-size: 14px; color: var(--navy-200); margin-top: 5px; }
     .hero-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      margin-top: 12px;
+      display: inline-flex; align-items: center; gap: 6px; margin-top: 12px;
       background: rgba(232,160,32,0.16); border: 1px solid rgba(232,160,32,0.32);
       color: var(--gold-400); padding: 5px 14px; border-radius: 20px;
       font-size: 12px; font-weight: 600;
     }
     .pulse-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--gold-400);
+      width: 7px; height: 7px; border-radius: 50%; background: var(--gold-400);
       animation: pulse 1.8s infinite;
     }
     @keyframes pulse {
@@ -140,8 +130,7 @@
     /* ══ MAIN ══ */
     .main {
       max-width: 900px; margin: -2.2rem auto 0;
-      padding: 0 1.5rem 3rem;
-      position: relative; z-index: 10;
+      padding: 0 1.5rem 3rem; position: relative; z-index: 10;
     }
 
     /* ══ METRICS ══ */
@@ -208,8 +197,9 @@
     .btn-checkin  { background: var(--green-500); color: #fff; }
     .btn-checkout { background: var(--navy-800);  color: #fff; }
     .btn-load     { background: var(--navy-50); color: var(--navy-700); border: 1px solid var(--border-md); }
+    .btn-leave    { background: var(--gold-100); color: var(--amber-500); border: 1px solid rgba(232,160,32,0.3); }
+    .btn-leave:hover { background: var(--gold-500); color: #fff; }
     .btn-excel    { background: var(--green-600); color: #fff; padding: 9px 16px; font-size: 12px; }
-    .btn-filter-go{ background: var(--navy-700); color: #fff; padding: 9px 16px; font-size: 12px; }
     .btn-reset-f  { background: none; color: var(--text-3); border: 1px solid var(--border-md); padding: 9px 14px; font-size: 12px; }
     .btn-reset-f:hover { background: var(--bg); }
 
@@ -217,8 +207,7 @@
     .att-card {
       background: var(--surface); border: 1px solid var(--border);
       border-radius: var(--radius-lg); overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      animation: slideUp .45s .30s ease both;
+      box-shadow: var(--shadow-sm); animation: slideUp .45s .30s ease both;
     }
     .att-card-header {
       padding: 1.1rem 1.5rem;
@@ -229,33 +218,30 @@
     .att-count { font-size: 12px; color: var(--text-3); margin-top: 2px; }
     .att-header-right { display: flex; gap: 8px; align-items: center; }
 
-    /* Filter row */
     .filter-row {
       padding: 12px 1.5rem;
       display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
       border-bottom: 1px solid var(--border); background: #f8fbff;
     }
     .filter-lbl { font-size: 11px; font-weight: 700; color: var(--text-3); letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; }
-    select, input[type="date"] {
-      font-family: var(--font); font-size: 12px;
-      padding: 8px 10px; border: 1px solid var(--border-md);
+    select, input[type="date"], input[type="text"], textarea {
+      font-family: var(--font); font-size: 13px;
+      padding: 9px 12px; border: 1px solid var(--border-md);
       border-radius: var(--radius-md); background: var(--surface); color: var(--text-1);
       cursor: pointer; outline: none; transition: border-color .15s, box-shadow .15s;
     }
-    select:focus, input[type="date"]:focus {
-      border-color: var(--navy-400);
-      box-shadow: 0 0 0 3px rgba(74,122,168,0.10);
+    select:focus, input[type="date"]:focus, input[type="text"]:focus, textarea:focus {
+      border-color: var(--navy-400); box-shadow: 0 0 0 3px rgba(74,122,168,0.10);
     }
+    textarea { resize: vertical; cursor: text; }
 
-    /* Table */
     .table-scroll { overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
     thead th {
       text-align: left; padding: 11px 16px;
       font-size: 10px; font-weight: 700; color: var(--text-3);
       letter-spacing: .06em; text-transform: uppercase;
-      background: var(--navy-50); border-bottom: 1px solid var(--border);
-      white-space: nowrap;
+      background: var(--navy-50); border-bottom: 1px solid var(--border); white-space: nowrap;
     }
     tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
     tbody tr:last-child { border-bottom: none; }
@@ -270,9 +256,12 @@
     }
     .bdot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
     .badge-present { background: var(--green-100); color: var(--green-500); }
-    .badge-absent  { background: var(--red-100);   color: var(--red-500);   }
+    .badge-absent  { background: var(--red-100);   color: var(--red-500); }
     .badge-late    { background: var(--amber-100);  color: var(--amber-500); }
-    .badge-half    { background: var(--navy-100);   color: var(--navy-600);  }
+    .badge-half    { background: var(--navy-100);   color: var(--navy-600); }
+    .badge-pending  { background: var(--gold-100);  color: var(--amber-500); }
+    .badge-approved { background: var(--green-100); color: var(--green-500); }
+    .badge-rejected { background: var(--red-100);   color: var(--red-500); }
 
     .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-3); }
     .empty-ico   { font-size: 38px; margin-bottom: 10px; opacity: .45; }
@@ -285,8 +274,7 @@
       transform: translateX(-50%) translateY(10px);
       background: var(--navy-900); color: #fff;
       border-radius: var(--radius-md); padding: 11px 22px;
-      font-size: 13px; font-weight: 500;
-      box-shadow: var(--shadow-lg);
+      font-size: 13px; font-weight: 500; box-shadow: var(--shadow-lg);
       opacity: 0; pointer-events: none;
       transition: opacity .22s, transform .22s;
       z-index: 9999; white-space: nowrap;
@@ -298,14 +286,13 @@
       position: fixed; inset: 0; z-index: 500;
       background: rgba(13,27,42,0.55);
       display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none;
-      transition: opacity .22s;
-      backdrop-filter: blur(4px);
+      opacity: 0; pointer-events: none; transition: opacity .22s;
+      backdrop-filter: blur(4px); padding: 1rem;
     }
     .overlay.open { opacity: 1; pointer-events: all; }
     .modal {
       background: var(--surface); border-radius: var(--radius-xl);
-      width: 100%; max-width: 440px; margin: 1rem;
+      width: 100%; max-width: 440px;
       box-shadow: var(--shadow-lg);
       transform: translateY(24px) scale(.97);
       transition: transform .25s; overflow: hidden;
@@ -343,28 +330,213 @@
     .prof-item-val { font-size: 13px; font-weight: 600; color: var(--text-1); }
 
     /* Logout */
-    .logout-ico {
-      width: 66px; height: 66px; border-radius: 50%; background: var(--red-100);
-      display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;
-    }
+    .logout-ico { width: 66px; height: 66px; border-radius: 50%; background: var(--red-100); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
     .logout-ico svg { width: 30px; height: 30px; color: var(--red-500); }
     .logout-msg { text-align: center; font-size: 14px; color: var(--text-2); line-height: 1.6; }
     .logout-msg strong { color: var(--text-1); }
     .logout-btns { display: flex; gap: 10px; margin-top: 1.5rem; }
-    .btn-cancel        { flex:1; background: var(--bg); color: var(--text-2); border: 1px solid var(--border-md); }
-    .btn-do-logout     { flex:1; background: var(--red-500); color: #fff; }
+    .btn-cancel    { flex:1; background: var(--bg); color: var(--text-2); border: 1px solid var(--border-md); }
+    .btn-do-logout { flex:1; background: var(--red-500); color: #fff; }
+
+    /* ══ LEAVE MODAL ══ */
+    .leave-modal { max-width: 520px; }
+    .leave-modal-head {
+      background: linear-gradient(135deg, var(--navy-800) 0%, var(--navy-700) 100%);
+      padding: 1.5rem 1.75rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .leave-modal-head-left { display: flex; align-items: center; gap: 12px; }
+    .leave-head-icon {
+      width: 42px; height: 42px; border-radius: var(--radius-md);
+      background: rgba(232,160,32,0.2); border: 1px solid rgba(232,160,32,0.3);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .leave-head-icon svg { width: 20px; height: 20px; color: var(--gold-400); }
+    .leave-modal-title { font-size: 16px; font-weight: 700; color: #fff; }
+    .leave-modal-sub   { font-size: 11px; color: var(--navy-200); margin-top: 2px; }
+
+    .leave-form { padding: 1.5rem 1.75rem; display: flex; flex-direction: column; gap: 14px; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-field { display: flex; flex-direction: column; gap: 5px; }
+    .form-field.full { grid-column: 1 / -1; }
+    .form-label {
+      font-size: 11px; font-weight: 700; color: var(--text-2);
+      letter-spacing: .05em; text-transform: uppercase;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .form-label .req { color: var(--red-500); }
+    .form-field select,
+    .form-field input[type="date"],
+    .form-field input[type="text"],
+    .form-field textarea {
+      width: 100%; font-size: 13px;
+      padding: 10px 12px; border: 1.5px solid var(--border-md);
+      border-radius: var(--radius-md); background: var(--surface); color: var(--text-1);
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .form-field select:focus,
+    .form-field input:focus,
+    .form-field textarea:focus {
+      border-color: var(--navy-400); box-shadow: 0 0 0 3px rgba(74,122,168,0.10); outline: none;
+    }
+    .form-field textarea { min-height: 80px; resize: vertical; }
+
+    /* Leave type pill selector */
+    .leave-type-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+    }
+    .leave-type-pill {
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      padding: 10px 6px; border-radius: var(--radius-md);
+      border: 1.5px solid var(--border-md); background: var(--surface);
+      cursor: pointer; transition: all .17s; font-family: var(--font);
+    }
+    .leave-type-pill:hover { border-color: var(--navy-400); background: var(--navy-50); }
+    .leave-type-pill.selected { border-color: var(--navy-600); background: var(--navy-50); box-shadow: 0 0 0 3px rgba(74,122,168,0.12); }
+    .leave-type-pill.selected .pill-icon { background: var(--navy-600); }
+    .leave-type-pill.selected .pill-icon svg { color: #fff; }
+    .pill-icon {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--navy-50); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .17s;
+    }
+    .pill-icon svg { width: 15px; height: 15px; color: var(--navy-600); transition: color .17s; }
+    .pill-label { font-size: 10px; font-weight: 700; color: var(--text-2); text-align: center; line-height: 1.3; }
+
+    /* Duration preview strip */
+    .duration-strip {
+      background: var(--navy-50); border: 1px solid var(--border);
+      border-radius: var(--radius-md); padding: 10px 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 12px; color: var(--text-2);
+      transition: all .2s;
+    }
+    .duration-strip.active { background: var(--gold-100); border-color: rgba(232,160,32,0.3); }
+    .duration-val { font-weight: 700; color: var(--text-1); font-size: 14px; }
+    .duration-val.gold { color: var(--amber-500); }
+
+    /* Form actions */
+    .form-actions { display: flex; gap: 10px; padding-top: 4px; }
+    .btn-submit-leave {
+      flex: 1; background: linear-gradient(135deg, var(--navy-700), var(--navy-600));
+      color: #fff; padding: 12px 20px; font-size: 13px; font-weight: 600;
+      border: none; border-radius: var(--radius-md); cursor: pointer;
+      font-family: var(--font); display: flex; align-items: center; justify-content: center; gap: 7px;
+      transition: all .18s;
+    }
+    .btn-submit-leave:hover { background: linear-gradient(135deg, var(--navy-800), var(--navy-700)); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+    .btn-submit-leave:active { transform: scale(.98); }
+    .btn-submit-leave svg { width: 15px; height: 15px; }
+    .btn-cancel-leave {
+      background: var(--bg); color: var(--text-2); border: 1px solid var(--border-md);
+      padding: 12px 20px; font-size: 13px; font-weight: 600;
+      border-radius: var(--radius-md); cursor: pointer; font-family: var(--font);
+      transition: all .15s;
+    }
+    .btn-cancel-leave:hover { background: var(--navy-50); color: var(--text-1); }
+
+    /* Half-day toggle */
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; }
+    .toggle-label { font-size: 12px; font-weight: 600; color: var(--text-2); }
+    .toggle-switch { position: relative; width: 40px; height: 22px; }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0; cursor: pointer;
+      background: var(--border-md); border-radius: 22px; transition: .25s;
+    }
+    .toggle-slider::before {
+      content: ''; position: absolute;
+      width: 16px; height: 16px; left: 3px; bottom: 3px;
+      background: white; border-radius: 50%; transition: .25s;
+      box-shadow: 0 1px 4px rgba(0,0,0,.2);
+    }
+    .toggle-switch input:checked + .toggle-slider { background: var(--navy-600); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+    /* Leave history tab */
+    .leave-tabs {
+      display: flex; border-bottom: 1px solid var(--border);
+      background: var(--navy-50);
+    }
+    .leave-tab {
+      padding: 11px 20px; font-size: 12px; font-weight: 600;
+      color: var(--text-3); cursor: pointer; border-bottom: 2px solid transparent;
+      transition: all .15s; white-space: nowrap;
+    }
+    .leave-tab:hover { color: var(--text-1); }
+    .leave-tab.active { color: var(--navy-700); border-bottom-color: var(--navy-700); background: var(--surface); }
+
+    /* Leave section card */
+    .leave-section {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); overflow: hidden;
+      box-shadow: var(--shadow-sm); margin-bottom: 14px;
+      animation: slideUp .45s .35s ease both;
+    }
+    .leave-section-header {
+      padding: 1.1rem 1.5rem;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+      border-bottom: 1px solid var(--border); background: var(--navy-50);
+    }
+    .leave-section-title { font-size: 15px; font-weight: 700; color: var(--text-1); }
+    .leave-section-sub   { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+
+    /* Leave balance bar */
+    .leave-balance-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 12px; padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .balance-item {
+      text-align: center; padding: 14px 10px;
+      background: var(--bg); border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+    }
+    .balance-num { font-size: 26px; font-weight: 700; color: var(--text-1); letter-spacing: -.02em; line-height: 1; }
+    .balance-num.gold  { color: var(--amber-500); }
+    .balance-num.green { color: var(--green-500); }
+    .balance-num.navy  { color: var(--navy-600); }
+    .balance-lbl { font-size: 10px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: .05em; margin-top: 5px; }
+    .balance-sub { font-size: 11px; color: var(--text-3); margin-top: 3px; }
+    .balance-bar { height: 4px; background: var(--border); border-radius: 4px; margin-top: 8px; overflow: hidden; }
+    .balance-fill { height: 100%; border-radius: 4px; }
+
+    /* Leave history table */
+    .leave-history-empty { text-align: center; padding: 2rem; color: var(--text-3); font-size: 13px; }
+
+    /* Confirmation success state */
+    .submit-success {
+      text-align: center; padding: 2rem 1.75rem;
+      display: none; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .submit-success.show { display: flex; }
+    .success-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--green-100); border: 2px solid rgba(30,140,90,.2);
+      display: flex; align-items: center; justify-content: center; margin-bottom: 6px;
+    }
+    .success-icon svg { width: 28px; height: 28px; color: var(--green-500); }
+    .success-title { font-size: 17px; font-weight: 700; color: var(--text-1); }
+    .success-msg   { font-size: 13px; color: var(--text-3); line-height: 1.6; }
+    .success-ref   { font-family: var(--mono); font-size: 12px; color: var(--navy-600); background: var(--navy-50); border: 1px solid var(--navy-100); border-radius: var(--radius-sm); padding: 5px 12px; }
 
     /* ══ RESPONSIVE ══ */
     @media(max-width:700px){
       .metrics-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
       .topnav { padding: 0 1rem; }
-      .hero   { padding: 2rem 1rem 3.5rem; }
+      .hero { padding: 2rem 1rem 3.5rem; }
       .hero-text h2 { font-size: 20px; }
       .main { padding: 0 1rem 2rem; }
+      .leave-balance-grid { grid-template-columns: 1fr 1fr; }
+      .leave-type-grid { grid-template-columns: repeat(2, 1fr); }
+      .form-row { grid-template-columns: 1fr; }
     }
     @media(max-width:440px){
       .action-panel { flex-direction: column; align-items: stretch; }
       .nav-brand-sub { display: none; }
+      .leave-balance-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -401,7 +573,6 @@
 
 <!-- ══════ HERO ══════ -->
 <div class="hero">
-  <!-- Decorative background SVG shapes -->
   <div class="hero-bg">
     <svg width="340" height="340" style="top:-80px;right:-60px;opacity:0.07">
       <circle cx="170" cy="170" r="160" fill="none" stroke="#e8a020" stroke-width="40"/>
@@ -457,9 +628,8 @@
           <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
         </svg>
       </div>
-      <div class="metric-label">Attendance Rate</div>
-      <div class="metric-value" id="mRate">—<span>%</span></div>
-      <div class="metric-sub">on-time</div>
+      <div class="metric-label">Status</div>
+      <div class="metric-value" id="mRate">--<span></span></div>
     </div>
     <div class="metric-card red">
       <div class="metric-icon red">
@@ -494,6 +664,70 @@
       </svg>
       Load Attendance
     </button>
+    <button class="btn btn-leave" onclick="openLeave()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+        <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/>
+      </svg>
+      Apply Leave
+    </button>
+  </div>
+
+  <!-- ══ LEAVE SECTION ══ -->
+  <div class="leave-section">
+    <div class="leave-section-header">
+      <div>
+        <div class="leave-section-title">Leave Overview</div>
+        <div class="leave-section-sub">Your leave balance &amp; history</div>
+      </div>
+      <button class="btn btn-leave" style="padding:8px 16px;font-size:12px" onclick="openLeave()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="width:13px;height:13px">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+        New Request
+      </button>
+    </div>
+
+    <!-- Balance -->
+    <div class="leave-balance-grid">
+      <div class="balance-item">
+        <div class="balance-num gold" id="balAnnual">12</div>
+        <div class="balance-lbl">Annual Leave</div>
+        <div class="balance-sub">days remaining</div>
+        <div class="balance-bar"><div class="balance-fill" id="barAnnual" style="width:80%;background:var(--amber-500)"></div></div>
+      </div>
+      <div class="balance-item">
+        <div class="balance-num green" id="balSick">6</div>
+        <div class="balance-lbl">Sick Leave</div>
+        <div class="balance-sub">days remaining</div>
+        <div class="balance-bar"><div class="balance-fill" id="barSick" style="width:60%;background:var(--green-500)"></div></div>
+      </div>
+      <div class="balance-item">
+        <div class="balance-num navy" id="balCasual">3</div>
+        <div class="balance-lbl">Casual Leave</div>
+        <div class="balance-sub">days remaining</div>
+        <div class="balance-bar"><div class="balance-fill" id="barCasual" style="width:50%;background:var(--navy-600)"></div></div>
+      </div>
+    </div>
+
+    <!-- Tabs + History table -->
+    <div class="leave-tabs">
+      <div class="leave-tab active" id="tabAll"     onclick="switchTab('all')">All Requests</div>
+      <div class="leave-tab"        id="tabPending" onclick="switchTab('pending')">Pending</div>
+      <div class="leave-tab"        id="tabApproved"onclick="switchTab('approved')">Approved</div>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>Leave Type</th><th>From</th><th>To</th>
+            <th>Days</th><th>Reason</th><th>Applied On</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="leaveHistoryBody">
+          <!-- <tr><td colspan="8"><div class="leave-history-empty">📋 No leave requests yet. Click <strong>Apply Leave</strong> to submit one.</div></td></tr> -->
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <!-- Attendance Card -->
@@ -512,8 +746,6 @@
         </button>
       </div>
     </div>
-
-    <!-- Filter Row -->
     <div class="filter-row">
       <span class="filter-lbl">Filter:</span>
       <select id="fStatus" onchange="applyFilter()">
@@ -527,18 +759,11 @@
       <input type="date" id="fTo"   onchange="applyFilter()" title="To date"/>
       <button class="btn btn-reset-f" onclick="resetFilter()">Reset</button>
     </div>
-
-    <!-- Table -->
     <div class="table-scroll">
       <table>
         <thead>
           <tr>
-            <th>#</th>
-            <th>Date</th>
-            <th>Check-In</th>
-            <th>Check-Out</th>
-            <th>Working Hours</th>
-            <th>Status</th>
+            <th>#</th><th>Date</th><th>Check-In</th><th>Check-Out</th><th>Working Hours</th><th>Status</th>
           </tr>
         </thead>
         <tbody id="attBody">
@@ -558,7 +783,6 @@
 
 </div><!-- /main -->
 
-<!-- ══ TOAST ══ -->
 <div class="toast" id="toast"></div>
 
 <!-- ══ PROFILE MODAL ══ -->
@@ -589,7 +813,7 @@
         </div>
         <div class="prof-item">
           <div class="prof-item-lbl">Attendance Rate</div>
-          <div class="prof-item-val" id="profRate">—</div>
+          <div class="prof-item-val" id="profRate"></div>
         </div>
       </div>
     </div>
@@ -618,6 +842,158 @@
   </div>
 </div>
 
+<!-- ══ LEAVE REQUEST MODAL ══ -->
+<div class="overlay" id="leaveOverlay" onclick="closeLeave()">
+  <div class="modal leave-modal" onclick="event.stopPropagation()" style="max-height:92vh;overflow-y:auto">
+
+    <div class="leave-modal-head">
+      <div class="leave-modal-head-left">
+        <div class="leave-head-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M8 18h.01"/>
+          </svg>
+        </div>
+        <div>
+          <div class="leave-modal-title">Apply for Leave</div>
+          <div class="leave-modal-sub">Submit a new leave request</div>
+        </div>
+      </div>
+      <button class="modal-x" onclick="closeLeave()">✕</button>
+    </div>
+
+    <!-- Form -->
+    <div id="leaveFormWrap">
+      <div class="leave-form" id="leaveForm">
+
+        <!-- Leave Type Pills -->
+        <div class="form-field full">
+          <div class="form-label">Leave Type <span class="req">*</span></div>
+          <div class="leave-type-grid" id="leaveTypePills">
+            <button type="button" class="leave-type-pill selected" data-type="Annual Leave" onclick="selectLeaveType(this)">
+              <div class="pill-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+              </div>
+              <span class="pill-label">Annual Leave</span>
+            </button>
+            <button type="button" class="leave-type-pill" data-type="Sick Leave" onclick="selectLeaveType(this)">
+              <div class="pill-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                </svg>
+              </div>
+              <span class="pill-label">Sick Leave</span>
+            </button>
+            <button type="button" class="leave-type-pill" data-type="Casual Leave" onclick="selectLeaveType(this)">
+              <div class="pill-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/>
+                </svg>
+              </div>
+              <span class="pill-label">Casual Leave</span>
+            </button>
+            <button type="button" class="leave-type-pill" data-type="Emergency Leave" onclick="selectLeaveType(this)">
+              <div class="pill-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+              </div>
+              <span class="pill-label">Emergency Leave</span>
+            </button>
+            <button type="button" class="leave-type-pill" data-type="Maternity/Paternity" onclick="selectLeaveType(this)">
+              <div class="pill-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                  <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+                </svg>
+              </div>
+              <span class="pill-label">Maternity / Paternity</span>
+            </button>
+            <button type="button" class="leave-type-pill" data-type="Other" onclick="selectLeaveType(this)">
+              <div class="pill-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                  <circle cx="12" cy="12" r="10"/><path d="M9 9a3 3 0 015.12 2.1c0 2.1-3.12 2.9-3.12 2.9M12 17h.01"/>
+                </svg>
+              </div>
+              <span class="pill-label">Other</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Date range -->
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-label">From Date <span class="req">*</span></label>
+            <input type="date" id="leaveFrom" onchange="calcDuration()" />
+          </div>
+          <div class="form-field">
+            <label class="form-label">To Date <span class="req">*</span></label>
+            <input type="date" id="leaveTo" onchange="calcDuration()" />
+          </div>
+        </div>
+
+        <!-- Half day toggle -->
+        <div class="form-field full">
+          <div class="toggle-row">
+            <span class="toggle-label">Half Day Leave</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="halfDayToggle" onchange="calcDuration()"/>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Duration preview -->
+        <div class="duration-strip" id="durationStrip">
+          <span>Duration</span>
+          <span class="duration-val" id="durationVal">Select dates above</span>
+        </div>
+
+        <!-- Reason -->
+        <div class="form-field full">
+          <label class="form-label">Reason / Details <span class="req">*</span></label>
+          <textarea id="leaveReason" placeholder="Briefly describe the reason for your leave request…" rows="3"></textarea>
+        </div>
+
+        <!-- Contact during leave -->
+        <div class="form-field full">
+          <label class="form-label">Emergency Contact (optional)</label>
+          <input type="text" id="leaveContact" placeholder="Phone number or email reachable during leave"/>
+        </div>
+
+        <!-- Form actions -->
+        <div class="form-actions">
+          <button type="button" class="btn-cancel-leave" onclick="closeLeave()">Cancel</button>
+          <button type="button" class="btn-submit-leave" onclick="submitLeave()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+              <path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/>
+            </svg>
+            Submit Request
+          </button>
+        </div>
+
+      </div><!-- /leave-form -->
+    </div><!-- /leaveFormWrap -->
+
+    <!-- Success state (hidden initially) -->
+    <div class="submit-success" id="leaveSuccess">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div class="success-title">Leave Request Submitted!</div>
+      <div class="success-msg">Your request has been sent to your manager for approval.<br/>You'll be notified once it's reviewed.</div>
+      <div class="success-ref" id="successRef">REF: —</div>
+      <button class="btn-submit-leave" style="margin-top:6px;width:100%;justify-content:center" onclick="closeLeave()">
+        Done
+      </button>
+    </div>
+
+  </div>
+</div>
+
 <!-- ══ SCRIPTS ══ -->
 <script>
   const EMP_NAME = "{{name}}";
@@ -625,6 +1001,9 @@
 
   let allRecords      = [];
   let filteredRecords = [];
+  let leaveHistory    = [];
+  let selectedLeaveType = 'Annual Leave';
+  let currentTab      = 'all';
 
   /* ─ Helpers ─ */
   function initials(n){ return (n||'EM').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
@@ -635,50 +1014,226 @@
     clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove('show'),ms);
   }
 
+  function genRef(){
+    return 'LR-'+Date.now().toString(36).toUpperCase().slice(-6);
+  }
+
   /* ─ Boot ─ */
   (function boot(){
-    const init = initials(EMP_NAME);
-    const hr   = new Date().getHours();
-    const greet= hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+    const init=initials(EMP_NAME);
+    const hr=new Date().getHours();
+    const greet=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+    document.getElementById('heroInit').textContent  =init;
+    document.getElementById('heroGreet').textContent =greet+', '+EMP_NAME+'!';
+    document.getElementById('navInit').textContent   =init;
+    document.getElementById('navName').textContent   =EMP_NAME;
+    document.getElementById('profAvatar').textContent=init;
+    document.getElementById('profName').textContent  =EMP_NAME;
+    document.getElementById('heroDate').textContent  =new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
 
-    document.getElementById('heroInit').textContent  = init;
-    document.getElementById('heroGreet').textContent = greet + ', ' + EMP_NAME + '!';
-    document.getElementById('navInit').textContent   = init;
-    document.getElementById('navName').textContent   = EMP_NAME;
-    document.getElementById('profAvatar').textContent= init;
-    document.getElementById('profName').textContent  = EMP_NAME;
-
-    document.getElementById('heroDate').textContent  = new Date().toLocaleDateString('en-IN',{
-      weekday:'long', day:'numeric', month:'long', year:'numeric'
-    });
+    // Set min date on leave form inputs
+    const today=new Date().toISOString().split('T')[0];
+    document.getElementById('leaveFrom').min=today;
+    document.getElementById('leaveTo').min=today;
   })();
 
   /* ─ Modals ─ */
   function openProfile(){
-    document.getElementById('profPresent').textContent = document.getElementById('mPresent').textContent;
-    document.getElementById('profRate').textContent    = document.getElementById('mRate').textContent;
+    document.getElementById('profPresent').textContent=document.getElementById('mPresent').textContent;
+    document.getElementById('profRate').textContent   =document.getElementById('mRate').textContent;
     document.getElementById('profileOverlay').classList.add('open');
   }
   function openLogout(){ document.getElementById('logoutOverlay').classList.add('open'); }
   function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-  function confirmLogout(){ showToast('Logging out…'); setTimeout(()=>{ window.location.href='/logout'; },1200); }
+  function confirmLogout(){ showToast('Logging out…'); setTimeout(()=>{window.location.href='/logout';},1200); }
+
+  /* ─ Leave Modal ─ */
+  function openLeave(){
+    document.getElementById('leaveFormWrap').style.display='block';
+    document.getElementById('leaveSuccess').classList.remove('show');
+    document.getElementById('leaveOverlay').classList.add('open');
+  }
+  function closeLeave(){
+    document.getElementById('leaveOverlay').classList.remove('open');
+  }
+
+  /* ─ Leave Type Selection ─ */
+  function selectLeaveType(el){
+    document.querySelectorAll('.leave-type-pill').forEach(p=>p.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedLeaveType=el.dataset.type;
+  }
+
+  /* ─ Duration Calculator ─ */
+  function calcDuration(){
+    const from=document.getElementById('leaveFrom').value;
+    const to  =document.getElementById('leaveTo').value;
+    const half=document.getElementById('halfDayToggle').checked;
+    const strip=document.getElementById('durationStrip');
+    const val  =document.getElementById('durationVal');
+
+    // Sync min date
+    if(from) document.getElementById('leaveTo').min=from;
+
+    if(!from||!to){
+      strip.classList.remove('active');
+      val.innerHTML='<span>Select dates above</span>';
+      val.className='duration-val';
+      return;
+    }
+    const d1=new Date(from), d2=new Date(to);
+    if(d2<d1){ val.textContent='Invalid range'; val.className='duration-val'; strip.classList.remove('active'); return; }
+
+    let days=0;
+    const cur=new Date(d1);
+    while(cur<=d2){
+      const dow=cur.getDay();
+      if(dow!==0&&dow!==6) days++;
+      cur.setDate(cur.getDate()+1);
+    }
+    if(half&&days>0) days=0.5;
+
+    strip.classList.add('active');
+    val.className='duration-val gold';
+    val.textContent=days+' working day'+(days!==1?'s':'');
+  }
+
+  /* ─ Submit Leave ─ */
+  function submitLeave(){
+    const from  =document.getElementById('leaveFrom').value;
+    const to    =document.getElementById('leaveTo').value;
+    const reason=document.getElementById('leaveReason').value.trim();
+    const half  =document.getElementById('halfDayToggle').checked;
+    const contact=document.getElementById('leaveContact').value.trim();
+
+    if(!from||!to){ showToast('Please select From and To dates.'); return; }
+    if(new Date(to)<new Date(from)){ showToast('To date must be after From date.'); return; }
+    if(!reason){ showToast('Please enter a reason for your leave.'); return; }
+
+    // Compute days
+    let days=0;
+    const cur=new Date(from);
+    const d2=new Date(to);
+    while(cur<=d2){const dow=cur.getDay();if(dow!==0&&dow!==6)days++;cur.setDate(cur.getDate()+1);}
+    if(half&&days>0)days=0.5;
+
+    const ref=genRef();
+    const today=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+
+    const record={
+      id: ref,
+      type: selectedLeaveType,
+      from, to, days, reason, contact,
+      halfDay: half,
+      appliedOn: today,
+      status: 'Pending'
+    };
+
+    // POST to backend
+    fetch('/apply_leave',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({user_id:EMP_ID, name:EMP_NAME,record})
+    })
+    .then(r=>r.json())
+    .then(data=>{
+      leaveHistory.unshift(record);
+      var report=data
+      // console.log(report);
+      
+      renderLeaveHistory(report);
+      showSuccessState(ref);
+      showToast('✓ Leave request submitted — '+ref);
+    })
+    .catch(()=>{
+      // Still show success locally (offline-friendly)
+      leaveHistory.unshift(record);
+      renderLeaveHistory();
+      showSuccessState(ref);
+      showToast('✓ Leave request submitted');
+    });
+  }
+
+  function showSuccessState(ref){
+    document.getElementById('leaveFormWrap').style.display='none';
+    document.getElementById('leaveSuccess').classList.add('show');
+    document.getElementById('successRef').textContent='REF: '+ref;
+    // Reset form
+    document.getElementById('leaveFrom').value='';
+    document.getElementById('leaveTo').value='';
+    document.getElementById('leaveReason').value='';
+    document.getElementById('leaveContact').value='';
+    document.getElementById('halfDayToggle').checked=false;
+    document.getElementById('durationStrip').classList.remove('active');
+    document.getElementById('durationVal').textContent='Select dates above';
+    document.querySelectorAll('.leave-type-pill').forEach((p,i)=>{
+      p.classList.toggle('selected',i===0);
+    });
+    selectedLeaveType='Annual Leave';
+  }
+
+  /* ─ Render Leave History ─ */
+  function renderLeaveHistory(report){
+    const STATUS_BADGES={
+      'Pending':  `<span class="badge badge-pending"><span class="bdot" style="background:var(--amber-500)"></span>Pending</span>`,
+      'Approved': `<span class="badge badge-approved"><span class="bdot" style="background:var(--green-500)"></span>Approved</span>`,
+      'Rejected': `<span class="badge badge-rejected"><span class="bdot" style="background:var(--red-500)"></span>Rejected</span>`,
+    };
+    let data=leaveHistory;
+    if(currentTab==='pending') data=leaveHistory.filter(r=>r.status==='Pending');
+    else if(currentTab==='approved') data=leaveHistory.filter(r=>r.status==='Approved');
+
+    const tbody=document.getElementById('leaveHistoryBody');
+    if(!report.length){
+      tbody.innerHTML=`<tr><td colspan="8"><div class="leave-history-empty">📋 No ${currentTab==='all'?'':currentTab+' '}requests found.</div></td></tr>`;
+      return;
+    }
+    let i=0;
+    tbody.innerHTML='';
+    report.forEach(element => {
+
+        let tr = document.createElement('tr');
+        i=i+1;
+        tr.innerHTML = `
+            <td>${i}</td>
+            <td>${element.type}</td>
+            <td>${element.from}</td>
+            <td>${element.to}</td>
+            
+            <td>${element.days}</td>
+            <td>${element.reason}</td>
+            <td>${element.applied_on}</td>
+            <td>${STATUS_BADGES[element.status]}</td>
+        `;
+
+        tbody.appendChild(tr);
+    });
+    
+
+      
+  }
+
+  /* ─ Tab switching ─ */
+  function switchTab(tab){
+    currentTab=tab;
+    document.querySelectorAll('.leave-tab').forEach(t=>t.classList.remove('active'));
+    document.getElementById('tab'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
+    renderLeaveHistory();
+  }
 
   /* ─ Check-in ─ */
   function checkIn(){
     if(!navigator.geolocation){ alert('Geolocation not supported'); return; }
     showToast('Getting your location…');
     navigator.geolocation.getCurrentPosition(async pos=>{
-      const {latitude:lat, longitude:lng} = pos.coords;
+      const {latitude:lat,longitude:lng}=pos.coords;
       try {
-        const geo  = await (await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)).json();
-        const res  = await fetch('/checkin',{
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({user_id:EMP_ID, name:EMP_NAME, lat, lng, location_name:geo.display_name})
-        });
-        const data = await res.json();
+        const geo=await (await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)).json();
+        const res=await fetch('/checkin',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:EMP_ID,name:EMP_NAME,lat,lng,location_name:geo.display_name})});
+        const data=await res.json();
+        document.getElementById('mRate').innerHTML=data.Stage;
         showToast('✓ '+(data.message||'Checked in successfully'));
       } catch { showToast('Check-in failed. Try again.'); }
-    }, ()=>alert('Location access denied'));
+    },()=>alert('Location access denied'));
   }
 
   /* ─ Check-out ─ */
@@ -686,66 +1241,74 @@
     if(!navigator.geolocation){ alert('Geolocation not supported'); return; }
     showToast('Getting your location…');
     navigator.geolocation.getCurrentPosition(async pos=>{
-      const {latitude:lat, longitude:lng} = pos.coords;
+      const {latitude:lat,longitude:lng}=pos.coords;
       try {
-        const geo  = await (await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)).json();
-        const res  = await fetch('/checkout',{
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({user_id:EMP_ID, lat, lng, location_name:geo.display_name})
-        });
-        const data = await res.json();
+        const geo=await (await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`)).json();
+        const res=await fetch('/checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:EMP_ID,lat,lng,location_name:geo.display_name})});
+        const data=await res.json();
+        document.getElementById('mRate').innerHTML=data.Stage;
         showToast('✓ '+(data.message||'Checked out successfully'));
       } catch { showToast('Check-out failed. Try again.'); }
-    }, ()=>alert('Location access denied'));
+    },()=>alert('Location access denied'));
   }
 
   /* ─ View Attendance ─ */
   function viewAttendance(){
-    document.getElementById('attBody').innerHTML =
-      `<tr><td colspan="6"><div class="empty-state"><div class="empty-ico">⏳</div><strong>Loading records…</strong></div></td></tr>`;
-    document.getElementById('attCount').textContent = 'Fetching…';
+    document.getElementById('attBody').innerHTML=`<tr><td colspan="6"><div class="empty-state"><div class="empty-ico">⏳</div><strong>Loading records…</strong></div></td></tr>`;
+    document.getElementById('attCount').textContent='Fetching…';
+    fetch('/view_attendance',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:EMP_ID,name:EMP_NAME})})
+      .then(r=>r.json())
+      .then(data=>{
+        allRecords=data||[];filteredRecords=[...allRecords];
+        computeMetrics(allRecords);renderTable(filteredRecords);
+        document.getElementById('attCount').textContent=allRecords.length+' record'+(allRecords.length!==1?'s':'')+' found';
+        showToast('Loaded '+allRecords.length+' records');
+      })
+      .catch(()=>{
+        document.getElementById('attBody').innerHTML=`<tr><td colspan="6"><div class="empty-state"><div class="empty-ico">⚠️</div><strong>Failed to load</strong><p>Please try again.</p></div></td></tr>`;
+        document.getElementById('attCount').textContent='Error loading records';
+      });
 
-    fetch('/view_attendance',{
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({user_id:EMP_ID, name:EMP_NAME})
-    })
-    .then(r=>r.json())
-    .then(data=>{
-      allRecords = data||[];
-      filteredRecords = [...allRecords];
-      computeMetrics(allRecords);
-      renderTable(filteredRecords);
-      document.getElementById('attCount').textContent = allRecords.length+' record'+(allRecords.length!==1?'s':'')+' found';
-      showToast('Loaded '+allRecords.length+' records');
-    })
-    .catch(()=>{
-      document.getElementById('attBody').innerHTML =
-        `<tr><td colspan="6"><div class="empty-state"><div class="empty-ico">⚠️</div><strong>Failed to load</strong><p>Please try again.</p></div></td></tr>`;
-      document.getElementById('attCount').textContent = 'Error loading records';
-    });
+      // -----------------------------getting the leave records----------
+      fetch('/get_leave',{
+        method:'POST',
+        headers:{'content-Type':'application/json'},
+        body:JSON.stringify({user_id:EMP_ID,name:EMP_NAME})
+      }).then(r=>r.json()).then(data=>{
+        renderLeaveHistory(data)
+        
+      })
+
+      // -----------------------getting the stage--------
+
+      fetch('/stage',{
+        method:'POST',
+        headers:{'content-Type':'application/json'},
+        body:JSON.stringify({user_id:EMP_ID,name:EMP_NAME})})
+        .then(r=>r.json())
+        .then(data=>{
+          let stage=data.stage;
+          document.getElementById('mRate').innerHTML=stage;
+          
+        })
+
+
+
   }
 
   /* ─ Metrics ─ */
   function computeMetrics(data){
-    const present = data.filter(r=>(r.status||'').toLowerCase()==='present').length;
-    const absent  = data.filter(r=>(r.status||'').toLowerCase()==='absent').length;
-    const ontime  = data.filter(r=>['present','half day'].includes((r.status||'').toLowerCase())).length;
-    const rate    = data.length>0 ? Math.round(ontime/data.length*100) : 0;
-    let totH=0, cntH=0;
-    data.forEach(r=>{
-      if(r.Working_hours && r.Working_hours!=='—'){
-        const m=String(r.Working_hours).match(/(\d+(\.\d+)?)/);
-        if(m){totH+=parseFloat(m[1]);cntH++;}
-      }
-    });
-    document.getElementById('mPresent').textContent = present;
-    document.getElementById('mAbsent').textContent  = absent;
-    document.getElementById('mHours').textContent   = cntH>0?(totH/cntH).toFixed(1):'—';
-    document.getElementById('mRate').innerHTML      = rate+'<span>%</span>';
+    const present=data.length;
+    const absent =data.filter(r=>(r.status||'').toLowerCase()==='absent').length;
+    let totH=0,cntH=0;
+    data.forEach(r=>{if(r.Working_hours&&r.Working_hours!=='—'){const m=String(r.Working_hours).match(/(\d+(\.\d+)?)/);if(m){totH+=parseFloat(m[1]);cntH++;}}});
+    document.getElementById('mPresent').textContent=present;
+    document.getElementById('mAbsent').textContent=absent;
+    document.getElementById('mHours').textContent=cntH>0?(totH/cntH).toFixed(1):'—';
   }
 
   /* ─ Render Table ─ */
-  const BADGES = {
+  const BADGES={
     present:   `<span class="badge badge-present"><span class="bdot" style="background:#1e8c5a"></span>Present</span>`,
     absent:    `<span class="badge badge-absent"><span class="bdot" style="background:#c0392b"></span>Absent</span>`,
     late:      `<span class="badge badge-late"><span class="bdot" style="background:#c07c1a"></span>Late</span>`,
@@ -753,14 +1316,11 @@
   };
 
   function renderTable(data){
-    const tbody = document.getElementById('attBody');
-    if(!data||!data.length){
-      tbody.innerHTML=`<tr><td colspan="6"><div class="empty-state"><div class="empty-ico">🔍</div><strong>No records match</strong><p>Try adjusting filters.</p></div></td></tr>`;
-      return;
-    }
-    tbody.innerHTML = data.map((r,i)=>{
-      const key   = (r.status||'').toLowerCase();
-      const badge = BADGES[key]||`<span class="badge badge-absent">${r.status||'—'}</span>`;
+    const tbody=document.getElementById('attBody');
+    if(!data||!data.length){tbody.innerHTML=`<tr><td colspan="6"><div class="empty-state"><div class="empty-ico">🔍</div><strong>No records match</strong><p>Try adjusting filters.</p></div></td></tr>`;return;}
+    tbody.innerHTML=data.map((r,i)=>{
+      const key=(r.status||'').toLowerCase();
+      const badge=BADGES[key]||`<span class="badge badge-absent">${r.status||'—'}</span>`;
       return `<tr>
         <td class="td-mono">${i+1}</td>
         <td>${r.date||'—'}</td>
@@ -774,24 +1334,17 @@
 
   /* ─ Filter ─ */
   function applyFilter(){
-    const status = document.getElementById('fStatus').value.toLowerCase();
-    const from   = document.getElementById('fFrom').value;
-    const to     = document.getElementById('fTo').value;
-    filteredRecords = allRecords.filter(r=>{
-      const ms = !status || (r.status||'').toLowerCase()===status;
-      let md = true;
-      if(from||to){
-        const d = new Date(r.date);
-        if(!isNaN(d)){
-          if(from && d<new Date(from)) md=false;
-          if(to   && d>new Date(to+'T23:59:59')) md=false;
-        }
-      }
+    const status=document.getElementById('fStatus').value.toLowerCase();
+    const from  =document.getElementById('fFrom').value;
+    const to    =document.getElementById('fTo').value;
+    filteredRecords=allRecords.filter(r=>{
+      const ms=!status||(r.status||'').toLowerCase()===status;
+      let md=true;
+      if(from||to){const d=new Date(r.date);if(!isNaN(d)){if(from&&d<new Date(from))md=false;if(to&&d>new Date(to+'T23:59:59'))md=false;}}
       return ms&&md;
     });
     renderTable(filteredRecords);
-    document.getElementById('attCount').textContent =
-      filteredRecords.length+' of '+allRecords.length+' records shown';
+    document.getElementById('attCount').textContent=filteredRecords.length+' of '+allRecords.length+' records shown';
   }
 
   function resetFilter(){
@@ -800,31 +1353,18 @@
     document.getElementById('fTo').value='';
     filteredRecords=[...allRecords];
     renderTable(filteredRecords);
-    document.getElementById('attCount').textContent =
-      allRecords.length+' record'+(allRecords.length!==1?'s':'')+' found';
+    document.getElementById('attCount').textContent=allRecords.length+' record'+(allRecords.length!==1?'s':'')+' found';
   }
 
   /* ─ Excel Export ─ */
   function downloadExcel(){
-    if(!filteredRecords||!filteredRecords.length){
-      showToast('No records to export. Load attendance first.'); return;
-    }
-    const rows = filteredRecords.map((r,i)=>({
-      '#':             i+1,
-      'Employee Name': EMP_NAME,
-      'Employee ID':   EMP_ID,
-      'Date':          r.date          ||'',
-      'Check-In':      r.check_in      ||'',
-      'Check-Out':     r.check_out     ||'',
-      'Working Hours': r.Working_hours ||'',
-      'Status':        r.status        ||'',
-    }));
-    const ws = XLSX.utils.json_to_sheet(rows);
-    ws['!cols'] = [{wch:5},{wch:22},{wch:14},{wch:14},{wch:12},{wch:12},{wch:16},{wch:12}];
-    const wb = XLSX.utils.book_new();
+    if(!filteredRecords||!filteredRecords.length){showToast('No records to export. Load attendance first.');return;}
+    const rows=filteredRecords.map((r,i)=>({'#':i+1,'Employee Name':EMP_NAME,'Employee ID':EMP_ID,'Date':r.date||'','Check-In':r.check_in||'','Check-Out':r.check_out||'','Working Hours':r.Working_hours||'','Status':r.status||''}));
+    const ws=XLSX.utils.json_to_sheet(rows);
+    ws['!cols']=[{wch:5},{wch:22},{wch:14},{wch:14},{wch:12},{wch:12},{wch:16},{wch:12}];
+    const wb=XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb,ws,'Attendance');
-    const today = new Date().toISOString().slice(0,10);
-    XLSX.writeFile(wb,`Attendance_${EMP_NAME.replace(/\s+/g,'_')}_${today}.xlsx`);
+    XLSX.writeFile(wb,`Attendance_${EMP_NAME.replace(/\s+/g,'_')}_${new Date().toISOString().slice(0,10)}.xlsx`);
     showToast('✓ Excel file downloaded');
   }
 </script>

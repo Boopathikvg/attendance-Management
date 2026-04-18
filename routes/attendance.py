@@ -1,6 +1,7 @@
 from flask import Blueprint, redirect, request, jsonify, render_template, url_for
 from datetime import datetime
 from database.db import attendance
+from database.db import leave_s
 
 attendance_bp = Blueprint('attendance', __name__)   
 
@@ -36,8 +37,8 @@ def checkin():
     if existing:
         out=attendance.find_one({"user_id": user_id, "date": today})
         if out and out["check_out"]!=None:
-            return jsonify({"message": "Already Checked Out"})
-        return jsonify({"message": "Already Checked In"})
+            return jsonify({"message": "Already Checked Out","Stage":out["Stage"]})
+        return jsonify({"message": "Already Checked In","Stage":out["Stage"]})
 
     # Late logic
     status = "Present"
@@ -54,6 +55,7 @@ def checkin():
         "check_in": current_time,
         "check_out": None,
         "status": status,
+        "Stage": "in-office",
         "check_in_location":{
             "lat": lat,
             "lng": lng,
@@ -66,10 +68,10 @@ def checkin():
     #data updated
     attendance.insert_one(record)
     check_in_=attendance.find_one({"user_id": user_id, "date": today})
-    i=check_in_["check_in"]
+    i=check_in_["Stage"]
     
 
-    return jsonify({"message": f"Checked In ({status})","in_time":i})
+    return jsonify({"message": f"Checked In ({status})","Stage":i})
 
 #logout <---------------------------------------------------ckeck-out--------------------------------------------->
 @attendance_bp.route('/checkout',methods=["POST"])
@@ -97,7 +99,7 @@ def checkout():
 
     #checking already checked out or not and early check out or not
     if out and out["check_out"]!=None:
-        return jsonify({"message": "Already Checked Out"})
+        return jsonify({"message": "Already Checked Out","Stage":out["Stage"]})
     else:
         if current_time < "06:00 PM":
              result = attendance.update_one(
@@ -114,7 +116,8 @@ def checkout():
                         "lng": lng,
                         "location_name": location_name
                     },
-                    "Working_hours": work_time
+                    "Working_hours": work_time,
+                    "Stage": "left-early"
                     
                 }
             }
@@ -133,16 +136,18 @@ def checkout():
                         "lng": lng,
                         "location_name": location_name
                     },
-                    "Working_hours": work_time
+                    "Working_hours": work_time,
+                    "Stage": "left-on-time"
                 }
             }
         )   
     if result.modified_count > 0:
-        return jsonify({"message": "Checked Out Successfully"})
+        out=attendance.find_one({"user_id": user_id, "date": today})
+        return jsonify({"message": "Checked Out Successfully","Stage": out["Stage"]})
     elif user_id and today:
         out=attendance.find_one({"user_id": user_id, "date": today})
         if out and out["check_out"]!=None:
-            return jsonify({"message": "Already Checked Out"})
+            return jsonify({"message": "Already Checked Out","Stage": out["Stage"]})
     else:
         return jsonify({"message": "Check-In not found"})
     
@@ -156,3 +161,70 @@ def view_attendance():
     name = data.get("name")
     if True:
         return redirect(url_for("view_attendance.view_attendance", user_id=user_id, name=name))
+
+#<---------------------------------------View Attendance--------------------------------------------->
+@attendance_bp.route("/logout")
+def logout():
+    return redirect(url_for("auth.login"))
+
+
+@attendance_bp.route('/apply_leave', methods=["POST"])
+def leave():
+    data = request.get_json()
+
+    user = data.get("user_id")
+    name = data.get("name")
+
+    record = data.get("record", {})   # safe default
+
+    d_from = record.get("from")
+    d_to = record.get("to")
+    l_id = record.get("id")
+    l_type = record.get("type")
+    l_days = record.get("days")
+    l_reason = record.get("reason")
+    contact = record.get("contact")
+    half_day = record.get("halfDay")
+    now = datetime.now()
+    date = now.strftime("%Y-%m-%d")
+    applied = date
+    status = record.get("status")
+
+    leave_s.insert_one({"user_id": user, "name": name, "from": d_from, "to": d_to, "type": l_type, "days": l_days, "reason": l_reason, "contact": contact, "half_day": half_day, "applied_on": applied, "status": status})
+    report = list(leave_s.find({"user_id": user}))
+
+    # ✅ Fix ObjectId
+    for r in report:
+        r["_id"] = str(r["_id"])
+
+    return jsonify(report)
+
+# -------------------------getting the leave report----------------------
+@attendance_bp.route('/get_leave', methods=['POST'])
+def get_record():
+    data=request.get_json()
+    
+    user=data.get('user_id')
+    name=data.get('name')
+    out=list(leave_s.find({"user_id":user}))
+
+    for r in out:
+        r["_id"]=str(r["_id"])
+    return jsonify(out)
+
+# ------------------getting the current status-------------
+@attendance_bp.route('/stage', methods=['POST'])
+def get_stage():
+    data=request.get_json()
+
+    user=data.get("user_id")
+    name= data.get("name")
+
+    now = datetime.now()
+    date = now.strftime("%Y-%m-%d")
+    out=attendance.find_one({"user_id":user,"date":date})
+    if not out:
+        return jsonify({"stage":"data not found"})
+    stage=out.get('Stage')
+
+    return jsonify({"stage":stage})
