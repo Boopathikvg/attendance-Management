@@ -43,12 +43,3 @@ def employee_attendance_get():
 
     return jsonify(result)
 
-@admin.route('/get_leave', methods=['POST'])
-def get_leave_request():
-
-    data=request.get_json()
-    name=data.get('name')
-    user=data.get('user')
-
-    out=leave_s.find({"status":"Pending"})
-    return jsonify(out)

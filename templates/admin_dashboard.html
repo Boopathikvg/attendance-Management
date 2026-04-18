@@ -1187,11 +1187,10 @@
     showToast('✓ Excel exported for '+drawerEmpName);
   }
 
-  document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeDrawer();closeProfile();} });
 
 
 
-  function get_leave()
+function get_leave()
   {
     fetch('/get_leave',{
       method:'POST',
@@ -1203,6 +1202,13 @@
       
     })
   }
+  get_leave()
+
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'){closeDrawer();closeProfile();} });
+
+
+
+  
 
 </script>
 </body>

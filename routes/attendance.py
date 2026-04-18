@@ -228,3 +228,27 @@ def get_stage():
     stage=out.get('Stage')
 
     return jsonify({"stage":stage})
+
+
+
+
+
+
+
+
+@attendance_bp.route('/get_leave', methods=['POST'])
+def get_leave_request():
+
+    data = request.get_json()
+
+    name = data.get('name')
+    user = data.get('user_id')   # ✅ FIXED
+
+    out = [1,2,3,4,5]  # or remove filter to test
+
+    return jsonify(out)
+    # # convert ObjectId
+    # for record in out:
+    #     record["_id"] = str(record["_id"])
+    # print("Working")
+    # return jsonify(out)
