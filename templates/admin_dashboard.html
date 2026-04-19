@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Dashboard — WorkTrack</title>
+  <title>Admin Dashboard — AlaguMurugan </title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -609,7 +609,7 @@
       </svg>
     </div>
     <div>
-      <div class="nav-brand-text">WorkTrack</div>
+      <div class="nav-brand-text">AlaguMurugan</div>
       <div class="nav-brand-sub">Employee Portal</div>
     </div>
     <div class="nav-badge">Admin</div>
@@ -877,7 +877,6 @@
 <div class="toast" id="toast"></div>
 
 
-<button onclick="get_leave()">request test</button>
 
 <script>
 
@@ -981,6 +980,7 @@
         showToast('Failed to load data');
       });
   }
+  loadAll()
 
   /* ══ STATS ══ */
   function renderStats(){
@@ -989,10 +989,10 @@
     allEmployees.forEach(emp=>{
       const att=emp._att;
       const todayRec=att.find(r=>r.date&&new Date(r.date).toDateString()===today);
-      if(todayRec&&(todayRec.status||'').toLowerCase()==='present') presentToday++;
+      if(todayRec&&(todayRec.status||'').toLowerCase()!='absent') presentToday++;
       else absentToday++;
       if(att.length>0){
-        const p=att.filter(r=>(r.status||'').toLowerCase()==='present').length;
+        const p=att.filter(r=>(r.status||'').toLowerCase()!='abent').length;
         totalRate+=Math.round(p/att.length*100); rateCount++;
       }
     });
@@ -1008,7 +1008,7 @@
     allEmployees.forEach(emp=>{
       const r=emp._att.find(r=>r.date&&new Date(r.date).toDateString()===today);
       const s=(r?.status||'absent').toLowerCase();
-      if(s==='present')pres++;else if(s==='late')late++;else if(s==='half day')half++;else abs++;
+      if(s==='absent')abs++;else if(s==='late')late++;else if(s==='half day')half++;else pres++;
     });
     if(donutChart)donutChart.destroy();
     donutChart=new Chart(document.getElementById('chartDonut').getContext('2d'),{
@@ -1025,7 +1025,7 @@
       let p=0,a=0;
       allEmployees.forEach(emp=>{
         const r=emp._att.find(r=>r.date&&new Date(r.date).toDateString()===ds);
-        if(r&&(r.status||'').toLowerCase()==='present')p++;else a++;
+        if(r&&(r.status||'').toLowerCase()!='absent')p++;else a++;
       });
       presentByDay.push(p); absentByDay.push(a);
       weekLabels.push(dt.toLocaleDateString('en-IN',{weekday:'short',day:'numeric'}));
@@ -1073,7 +1073,7 @@
     }
     grid.innerHTML=allEmployees.map((emp,i)=>{
       const att=emp._att; let rate=0,rateStr='—';
-      if(att&&att.length>0){const p=att.filter(r=>(r.status||'').toLowerCase()==='present').length;rate=Math.round(p/att.length*100);rateStr=rate+'%';}
+      if(att&&att.length>0){const p=att.filter(r=>(r.status||'').toLowerCase()!='absent').length;rate=Math.round(p/att.length*100);rateStr=rate+'%';}
       const barColor=rate>=90?'var(--green)':rate>=70?'var(--amber)':'var(--red)';
       return `<div class="emp-card" style="animation-delay:${Math.min(i*.04,.5)}s" onclick="openDrawer('${emp._id}','${(emp.name||'').replace(/'/g,"\\'")}','${emp.email||''}','${emp.role||''}')">
         <div class="emp-card-top">
@@ -1120,7 +1120,7 @@
   }
 
   function computeDrawerStats(data){
-    const present=data.filter(r=>(r.status||'').toLowerCase()==='present').length;
+    const present=data.length;
     const absent =data.filter(r=>(r.status||'').toLowerCase()==='absent').length;
     const late   =data.filter(r=>(r.status||'').toLowerCase()==='late').length;
     const rate   =data.length>0?Math.round(present/data.length*100):0;
@@ -1187,7 +1187,7 @@
     showToast('✓ Excel exported for '+drawerEmpName);
   }
 
-
+console.log(EMP_ID);
 
 
 function get_leave()
