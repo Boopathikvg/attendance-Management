@@ -1,9 +1,12 @@
 from flask import Blueprint, redirect, request, jsonify, render_template, url_for
-from datetime import datetime
+from datetime import datetime, timezone
 from database.db import attendance
 from database.db import leave_s
+import pytz
 
-attendance_bp = Blueprint('attendance', __name__)   
+attendance_bp = Blueprint('attendance', __name__) 
+ist = pytz.timezone('Asia/Kolkata')
+
 
 
 #------------------------------redriect to employee dashboard-------------------------------
@@ -24,8 +27,9 @@ def checkin():
     location_name = data.get("location_name")
 
     #get current date and time
-    today = datetime.now().strftime("%Y-%m-%d")
-    current_time = datetime.now().strftime("%I:%M %p")
+    ist = pytz.timezone('Asia/Kolkata')
+    today = datetime.now(ist).strftime("%Y-%m-%d")
+    current_time = datetime.now(ist).strftime("%I:%M %p")
 
     # Check if already checked in
     existing = attendance.find_one({
@@ -83,8 +87,8 @@ def checkout():
     location_name = data.get("location_name")
 
 
-    today = datetime.now().strftime("%Y-%m-%d")
-    current_time = datetime.now().strftime("%I:%M %p")
+    today = datetime.now(ist).strftime("%Y-%m-%d")
+    current_time = datetime.now(ist).strftime("%I:%M %p")
 
     out=attendance.find_one({"user_id": user_id, "date": today})
 
@@ -185,7 +189,7 @@ def leave():
     l_reason = record.get("reason")
     contact = record.get("contact")
     half_day = record.get("halfDay")
-    now = datetime.now()
+    now = datetime.now(ist)
     date = now.strftime("%Y-%m-%d")
     applied = date
     status = record.get("status")
@@ -220,7 +224,7 @@ def get_stage():
     user=data.get("user_id")
     name= data.get("name")
 
-    now = datetime.now()
+    now = datetime.now(ist)
     date = now.strftime("%Y-%m-%d")
     out=attendance.find_one({"user_id":user,"date":date})
     if not out:
