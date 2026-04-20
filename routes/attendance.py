@@ -3,6 +3,8 @@ from datetime import datetime, timezone
 from database.db import attendance
 from database.db import leave_s
 import pytz
+from zoneinfo import ZoneInfo
+
 
 attendance_bp = Blueprint('attendance', __name__) 
 ist = pytz.timezone('Asia/Kolkata')
@@ -28,8 +30,8 @@ def checkin():
 
     #get current date and time
     ist = pytz.timezone('Asia/Kolkata')
-    today = datetime.now(ist).strftime("%Y-%m-%d")
-    current_time = datetime.now(ist).strftime("%I:%M %p")
+    today = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%Y-%m-%d")
+    current_time = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%I:%M %p")
 
     # Check if already checked in
     existing = attendance.find_one({
@@ -87,8 +89,8 @@ def checkout():
     location_name = data.get("location_name")
 
 
-    today = datetime.now(ist).strftime("%Y-%m-%d")
-    current_time = datetime.now(ist).strftime("%I:%M %p")
+    today = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%Y-%m-%d")
+    current_time = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%I:%M %p")
 
     out=attendance.find_one({"user_id": user_id, "date": today})
 
@@ -224,7 +226,7 @@ def get_stage():
     user=data.get("user_id")
     name= data.get("name")
 
-    now = datetime.now(ist)
+    now = datetime.now(ZoneInfo("Asia/Kolkata"))
     date = now.strftime("%Y-%m-%d")
     out=attendance.find_one({"user_id":user,"date":date})
     if not out:
