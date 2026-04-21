@@ -43,3 +43,62 @@ def employee_attendance_get():
 
     return jsonify(result)
 
+
+@admin.route('/get_leave_data', methods=['POST'])
+def get_leave_request():
+
+    out = list(leave_s.find())
+
+    for r in out:
+        r["_id"] = str(r["_id"])
+
+    return jsonify(out)
+
+
+@admin.route('/leave_approve', methods=['POST'])
+def approve_leave():
+    data=request.get_json()
+    user=data.get("user")
+    dat=data.get("date")
+    if user:
+
+        result = leave_s.update_one(
+                {
+                    "_id":ObjectId(user) ,
+                    
+                },
+                {
+                    "$set": {
+                        "status":"Approved"
+                    }
+                }
+            )
+        out=leave_s.find_one({"_id":ObjectId(user)})
+        out['_id']=str(out['_id'])
+        return jsonify({"Data":out})
+
+    
+
+    return jsonify({"Data":"not recived"})
+
+
+
+
+
+
+@admin.route('/leave_denied', methods=['POST'])
+def denied_leave():
+    data=request.get_json()
+    user=data.get("user")
+    result = leave_s.update_one(
+            {
+                "_id":ObjectId(user) ,
+                
+            },
+            {
+                "$set": {
+                    "status":"Rejected"
+                }
+            }
+        )
+    return jsonify({"Data":"Recived"})

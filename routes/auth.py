@@ -11,6 +11,7 @@ def login():
         password = request.form["password"]
 
         user = users.find_one({"email": email})
+        
 
         if user and user["password"] == password:
             if user["role"]=="admin":
