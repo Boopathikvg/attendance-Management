@@ -233,9 +233,9 @@ def get_stage():
         return jsonify({"stage":"data not found"})
     stage=out.get('Stage')
 
-    
-
     return jsonify({"stage":stage})
+
+#------------------------------------------------------Late Entry -------------------------------
 
 
 

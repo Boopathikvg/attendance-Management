@@ -44,6 +44,8 @@ def employee_attendance_get():
     return jsonify(result)
 
 
+
+# -------------------------to get the Leave data ------------------------------------->
 @admin.route('/get_leave_data', methods=['POST'])
 def get_leave_request():
 
@@ -54,12 +56,11 @@ def get_leave_request():
 
     return jsonify(out)
 
-
+# ----------------------------------------------Leave Approve----------------------------------->
 @admin.route('/leave_approve', methods=['POST'])
 def approve_leave():
     data=request.get_json()
     user=data.get("user")
-    dat=data.get("date")
     if user:
 
         result = leave_s.update_one(
@@ -76,15 +77,13 @@ def approve_leave():
         out=leave_s.find_one({"_id":ObjectId(user)})
         out['_id']=str(out['_id'])
         return jsonify({"Data":out})
-
     
-
     return jsonify({"Data":"not recived"})
 
 
 
 
-
+# #<-------------------------------------------------leave Deny------------------------->
 
 @admin.route('/leave_denied', methods=['POST'])
 def denied_leave():
@@ -102,3 +101,13 @@ def denied_leave():
             }
         )
     return jsonify({"Data":"Recived"})
+
+
+
+# <------------------------------------------------------Add New Employee----------------------------------->
+
+@admin.route('/Add_Employee', methods=['POST'])
+def Add_New_Employee():
+    data=request.get_json()
+    users.insert_one(data)
+    return jsonify(data.name)
